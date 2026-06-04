@@ -18,16 +18,26 @@ The `storms` dataset contains data on tropical cyclones from 1975 to 2022. Below
 
 ```{r storm-plot}
 storms |> 
-  group_by(year) |> 
+  filter(status %in% c("tropical depression", "tropical storm", "hurricane")) |> 
+  mutate(status = factor(status, levels = c("hurricane", "tropical storm", "tropical depression"))) |> 
+  group_by(year, status) |> 
   summarise(n_storms = n_distinct(name), .groups = "drop") |> 
-  ggplot(aes(x = year, y = n_storms)) +
-  geom_line(color = "steelblue", linewidth = 1) +
-  geom_point(color = "steelblue") +
+  ggplot(aes(x = year, y = n_storms, fill = status)) +
+  geom_area(alpha = 0.8) +
+  scale_fill_manual(
+    values = c(
+      "tropical depression" = "lightblue",
+      "tropical storm" = "orange",
+      "hurricane" = "darkred"
+    )
+  ) +
   theme_minimal() +
   labs(
-    title = "Number of Named Storms per Year",
+    title = "Storm Frequency by Type (1975-2022)",
+    subtitle = "Stacked count of unique named storms per year",
     x = "Year",
-    y = "Count of Unique Names"
+    y = "Count of Unique Names",
+    fill = "Storm Type"
   )
 ```
 
