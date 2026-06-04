@@ -1,0 +1,51 @@
+---
+title: "Exploring Storms"
+author: "Var Kurapati"
+format: html
+execute:
+  echo: false
+---
+
+```{r setup}
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+## Storm Frequency Over Time
+
+The `storms` dataset contains data on tropical cyclones from 1975 to 2022. Below is a visualization of the number of unique named storms recorded each year.
+
+```{r storm-plot}
+storms |> 
+  group_by(year) |> 
+  summarise(n_storms = n_distinct(name), .groups = "drop") |> 
+  ggplot(aes(x = year, y = n_storms)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_point(color = "steelblue") +
+  theme_minimal() +
+  labs(
+    title = "Number of Named Storms per Year",
+    x = "Year",
+    y = "Count of Unique Names"
+  )
+```
+
+## Wind Speed Distribution by Category
+
+This plot shows how wind speeds vary across different storm categories.
+
+```{r wind-boxplot}
+storms |>
+  filter(!is.na(category)) |> 
+  mutate(category = as.factor(category)) |> 
+  ggplot(aes(x = category, y = wind, fill = category)) +
+  geom_boxplot(show.legend = FALSE) +
+  theme_minimal() +
+  labs(
+    title = "Wind Speed Distribution across Hurricane Categories",
+    subtitle = "Higher category storms exhibit significantly higher median wind speeds",
+    x = "Hurricane Category",
+    y = "Wind Speed (knots)"
+  )
+```

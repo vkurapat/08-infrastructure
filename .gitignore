@@ -1,0 +1,19 @@
+# Quarto
+.quarto/
+_site/
+_freeze/
+_book/
+site_libs/
+*_files/
+
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# VS Code
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
